@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'dart:async';
+
+import '../../resources/strings.dart';
+import '../../services/auth/auth_service.dart';
+import '../../shared/loadingPage.dart';
+
+class SplashPage extends StatefulWidget {
+  SplashPage({super.key});
+
+  @override
+  _SplashPageState createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  // late AuthService _auth;
+
+  @override
+  void initState() {
+    super.initState();
+    // _auth = AuthService();
+    AuthService();
+    Timer(Duration(seconds: 2), () {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/wrapper', (Route<dynamic> route) => false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final double width = MediaQuery.of(context).size.width;
+    // final double height = MediaQuery.of(context).size.height;
+
+    return Material(
+        child: Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Expanded(
+              flex: 6,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 115,
+                      width: 100,
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Image.asset("assets/applogoaspect.png"),
+                    ),
+                    Text(
+                      Strings.PLACEMENT,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 24.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    LoadingPage(),
+                  ],
+                )),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text("Updated by", style: TextStyle(color: Colors.blueAccent, fontSize: 12)),
+                      SizedBox(height: 2),
+                      Text("HUKA_Taro", style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ],
+    ));
+  }
+}
