@@ -49,3 +49,13 @@ It's that simple!
 This app is based on IMG's Placement Flutter app and adds independent push alerts for changes in the current-season placement company results index. **Automatic alerts require the custom backend.** The backend checks for updates and sends Firebase pushes while it is running. Other app features use Channel i. Contact [HUKA_Taro](https://github.com/HUKA-Taro) if you need access to host the checker locally.
 
 For Android, register package `com.huka.taro.placementv2` in the Firebase project you control, download its `google-services.json` into `android/app/`, and run `flutter pub get`. The app displays alerts while open, and Android displays them in the background after the app has been opened and notification permission granted. Force-stopping the app blocks delivery until it is opened again.
+
+## Check the notification backend
+
+Open **Profile > Notification settings** to see whether the checker is online,
+offline, or running with a feed that is not ready. The app refreshes the status
+every 30 seconds while this screen is open. Tap the refresh icon to check again.
+The status becomes available once the checker host configures and publishes its
+Firestore heartbeat. If Firestore cannot be reached, the app reports that it
+could not verify the status.
+The public checker sends placement result alerts. The deadline preference is reserved for a backend that supports deadline alerts.
