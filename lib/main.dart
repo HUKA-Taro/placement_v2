@@ -10,14 +10,14 @@ import 'services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // TODO: Look for more consistent method that prevent race condition when phone is sleeping
+  setupLocator();
+  await AuthService().initState();
   try {
     await CustomPushService.initialize();
   } catch (error) {
     debugPrint('[push] setup failed; app will continue without push: $error');
   }
-  // TODO: Look for more consistent method that prevent race condition when phone is sleeping
-  setupLocator();
-  await AuthService().initState();
   runApp(MyApp());
 }
 

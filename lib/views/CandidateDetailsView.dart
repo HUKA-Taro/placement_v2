@@ -6,6 +6,8 @@ import '../resources/strings.dart';
 import '../shared/loadingPage.dart';
 import '../viewmodels/CandidateDetailsViewModel.dart';
 import 'baseView.dart';
+import '../services/notifications/custom_push_service.dart';
+import '../services/notifications/notification_settings.dart';
 
 class CandidateDetailsView extends StatelessWidget {
   const CandidateDetailsView({super.key});
@@ -100,6 +102,20 @@ class CandidateDetailsView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          if (CustomPushService.supported) ...[
+            _divider(),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+              leading: const Icon(Icons.notifications_outlined),
+              title: Text(
+                'Notification settings',
+                style: TextStyle(color: R.textColPrimary),
+              ),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const NotificationSettings(),
+              )),
+            ),
+          ],
           _divider(),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
