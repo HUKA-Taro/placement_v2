@@ -1,3 +1,4 @@
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/companyWiseStudentModel.dart';
@@ -21,6 +22,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
   late Future<void> _resultsFuture;
   bool _isSearching = false;
   String _query = '';
+  bool _profileLinks = false;
 
   @override
   void initState() {
@@ -63,6 +65,13 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
                 )
               : const Text('Company Results'),
           actions: [
+            IconButton(
+              isSelected: _profileLinks,
+              tooltip: _profileLinks ? 'Disable profile links' : 'Enable profile links',
+              icon: const Icon(Icons.link_off),
+              selectedIcon: const Icon(Icons.link),
+              onPressed: () => setState(() => _profileLinks = !_profileLinks),
+            ),
             if (!_isSearching)
               IconButton(
                 onPressed: () => setState(() => _isSearching = true),
@@ -112,13 +121,31 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
           padding: EdgeInsets.all(0),
           shrinkWrap: true,
           itemBuilder: (context, index) {
+            final id = results[index].studentEnrolmentNumber?.trim() ?? '';
+            final canOpen = _profileLinks && id != '0' && RegExp(r'^\d+$').hasMatch(id);
             return Card(
               margin: EdgeInsets.only(bottom: 1),
               elevation: 0.2,
               child: ListTile(
+                onTap: canOpen ? () async {
+                  final uri = Uri.https('channeli.in', '/student_profile/$id/');
+                  var launched = false;
+                  try {
+                    launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (_) {}
+                  if (!launched && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Could not open the Channel i profile.')),
+                    );
+                  }
+                } : null,
                 title: Text(
                   results[index].studentName,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: canOpen ? const Color(0xFF1565C0) : null,
+                    decoration: canOpen ? TextDecoration.underline : null,
+                  ),
                 ),
                 subtitle: Container(
                   padding: EdgeInsets.only(bottom: 5),

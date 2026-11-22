@@ -42,7 +42,7 @@ class CandidateModel {
       degreeId: json['student']['branch']['degree']['id'],
       degreeName: json['student']['branch']['degree']['name'] ?? "-",
       departmentName: json['student']['branch']['department']['name'] ?? "-",
-      currentYear: json['student']['currentYear'] ?? "-",
+      currentYear: int.tryParse(json['student']['currentYear']?.toString() ?? ''),
       internshipStatus: json['status'] ?? "Closed",
       season: json['season'] ?? "Not Eligible",
       creditsPoolA: json['creditsPoolA'] ?? 100,

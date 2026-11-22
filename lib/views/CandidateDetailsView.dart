@@ -1,3 +1,4 @@
+import '../shared/profile_app_update.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -175,6 +176,7 @@ class CandidateDetailsView extends StatelessWidget {
             },
           ),
           _divider(),
+          const ProfileAppUpdate(),
         ],
       ),
     );
@@ -316,6 +318,7 @@ class CandidateDetailsView extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: displayPicture,
                 placeholder: _imagePlaceHolder,
+                errorWidget: (context, url, error) => _imagePlaceHolder(context, url),
                 imageBuilder: (context, imageProvider) {
                   return CircleAvatar(
                     backgroundImage: imageProvider,
@@ -328,9 +331,11 @@ class CandidateDetailsView extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          Text(
-            model.candidateName,
-            style: TextStyle(fontSize: 30),
+          Flexible(
+            child: Text(
+              model.candidateName ?? '',
+              style: const TextStyle(fontSize: 30),
+            ),
           ),
         ],
       ),

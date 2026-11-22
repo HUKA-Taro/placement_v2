@@ -50,9 +50,11 @@ class ApplyService {
         var _profilePic = await _requestService.makeGetRequest(
           EndPoints.HOST + EndPoints.WHOAMI
         );
-        if(_profilePic != -1 && _profilePic != -2) {
-          if (_profilePic['displayPicture'] != null){
-            candidate.displayPicture = EndPoints.HOST + _profilePic['displayPicture'].toString();
+        if (_profilePic is Map && _profilePic['displayPicture'] is String) {
+          final picture = _profilePic['displayPicture'].trim() as String;
+          final uri = Uri.parse(EndPoints.HOST).resolve(picture);
+          if (picture.isNotEmpty && uri.scheme == 'https' && uri.host.isNotEmpty) {
+            candidate.displayPicture = uri.toString();
           }
         }
         _cache.candidateData = candidate;

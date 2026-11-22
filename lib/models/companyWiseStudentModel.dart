@@ -19,7 +19,7 @@ class CompantWiseStudentModel {
 
   factory CompantWiseStudentModel.fromJson(Map<String, dynamic> _json) {
     return CompantWiseStudentModel(
-      studentEnrolmentNumber: _json['studentEnrolmentNumber'] ?? '',
+      studentEnrolmentNumber: _json['studentEnrolmentNumber']?.toString(),
       studentName: _json['studentName'] ?? '',
       studentBranchName: _json['studentBranchName'] ?? '',
       studentDegree: _json['studentDegree'] ?? '',

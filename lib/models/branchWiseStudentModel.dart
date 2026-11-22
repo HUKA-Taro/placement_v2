@@ -1,5 +1,5 @@
 class BranchWiseStudentModel {
-  final int? studentEnrolmentNumber;
+  final String? studentEnrolmentNumber;
   final String studentName;
   final String companyName;
 
@@ -11,7 +11,7 @@ class BranchWiseStudentModel {
 
   factory BranchWiseStudentModel.fromJson(Map<String, dynamic> _json) {
     return BranchWiseStudentModel(
-      studentEnrolmentNumber: _json['studentEnrolmentNumber'] ?? 0,
+      studentEnrolmentNumber: _json['studentEnrolmentNumber']?.toString(),
       studentName: _json['studentName'] ?? '',
       companyName: _json['companyName'] ?? ''
     );
