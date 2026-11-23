@@ -82,7 +82,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                   child: Align(
                     child: _keyboardIsVisible()
                         ? Container()
-                        : _lotsOfLove(context, _width, _height),
+                        : _updateCredit(),
                     alignment: Alignment.bottomCenter,
                   ),
                 ),
@@ -276,27 +276,16 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
     );
   }
 
-  Widget _lotsOfLove(BuildContext context, double _width, double _height) {
-    return const Row(
+  Widget _updateCredit() {
+    return const Column(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Made With ",
-          style: TextStyle(
-            color: Colors.black54,
-          ),
-        ),
-        Icon(
-          Icons.favorite,
-          color: Colors.red,
-        ),
-        Text(
-          " by IMG",
-          style: TextStyle(
-            color: Colors.black54,
-          ),
-        ),
+      children: [
+        Text('Updated by',
+            style: TextStyle(color: Colors.blueAccent, fontSize: 12)),
+        SizedBox(height: 2),
+        Text('HUKA_Taro',
+            style: TextStyle(
+                color: Colors.blueAccent, fontWeight: FontWeight.w600)),
       ],
     );
   }
