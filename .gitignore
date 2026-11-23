@@ -61,3 +61,5 @@ android/fastlane/test_output/
 **/google-services.json
 **/key.properties
 *.p12
+/ios/Flutter/ephemeral/
+/android/.kotlin/

@@ -6,12 +6,10 @@ Browse placement listings, apply through Channel i, and get Android alerts when 
 
 ## Install on Android
 
-1. Download the APK from [GitHub Releases](https://github.com/HUKA-Taro/placementv2/releases/latest) and open it on your phone.
+1. Open the signed release APK on your phone and follow Android's installation prompts.
 2. Sign in with your Channel i account and allow notifications if you want alerts.
 
-If you installed a V2 debug build, uninstall it before installing the release APK. GitHub restricts downloads to users with repository access while the repository is private.
-
-Your installed version is shown at the bottom of **Profile**. Tap **Check for updates** to see if a newer public release is available.
+Your installed version is shown at the bottom of **Profile**. On launch, the app checks the required build published by the Channel i checker. If an update is required, the app opens the official APK download when you tap **Install latest version**. Android asks you to confirm the installation.
 
 ## Features
 
@@ -22,9 +20,11 @@ Your installed version is shown at the bottom of **Profile**. Tap **Check for up
 
 ## Notification settings
 
-Open **Profile → Notification settings** to manage alerts and see the checker’s status. The status refreshes every 30 seconds while this screen is open. You can also tap the refresh icon.
+Open **Profile → Notification settings** to manage alerts.
 
-Automatic alerts depend on the [Channel i checker](https://github.com/HUKA-Taro/channeli-checker) reaching the feeds and sending pushes through Firebase Cloud Messaging. An online checker can still show that a feed is unready. Contact [HUKA_Taro](https://github.com/HUKA-Taro) if you want to host the checker. The public checker sends result alerts. Deadline alerts require a checker that supports them.
+Automatic alerts depend on the [Channel i checker](https://github.com/HUKA-Taro/channeli-checker) reaching the feeds and sending pushes through Firebase Cloud Messaging. Contact [HUKA_Taro](https://github.com/HUKA-Taro) if you want to host the checker. The public checker sends result alerts. Deadline alerts require a checker that supports them.
+
+**Send test notification** shows a local notification. If Android blocks notifications, the app will ask for permission or direct you to Android settings.
 
 Android can display alerts after you swipe the app away from Recents. If you force-stop the app in Android settings, reopen it to resume delivery.
 
@@ -34,7 +34,9 @@ Install Flutter and the Android SDK. Register `com.huka.taro.placementv2` as an 
 
 ```sh
 flutter pub get
-flutter build apk --debug
+flutter build apk --release
 ```
 
-Find the APK at `build/app/outputs/flutter-apk/app-debug.apk` relative to the Flutter project directory.
+The Android project builds the release variant only. Find the signed APK at `build/app/outputs/flutter-apk/app-release.apk`. Configure `android/key.properties` locally with the existing release signing key for this app. Keep the properties file and signing key out of Git.
+
+Publish the APK as `placementv2-2.3.0-14.apk` under tag `v2.3.0`. For each future release, use the version and Android build number from `pubspec.yaml`. Publish only once the signed APK is ready. The checker reads both app release repos and makes that build required.

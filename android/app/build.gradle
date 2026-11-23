@@ -58,6 +58,14 @@ android {
     }
 }
 
+androidComponents {
+    beforeVariants(selector().all()) { variant ->
+        if (variant.buildType != "release") {
+            variant.enable = false
+        }
+    }
+}
+
 flutter {
     source '../..'
 }

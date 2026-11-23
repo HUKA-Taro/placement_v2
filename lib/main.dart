@@ -1,3 +1,4 @@
+import 'shared/app_version_gate.dart';
 import 'package:flutter/material.dart';
 import 'services/notifications/custom_push_service.dart';
 
@@ -5,11 +6,15 @@ import 'locator.dart';
 import 'resources/R.dart';
 import 'services/routing/navigationService.dart';
 import 'services/routing/placement_routes.dart';
-import 'services/routing/navigationService.dart';
 import 'services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(AppVersionGate(
+      start: _initializeApp, app: () => MyApp()));
+}
+
+Future<void> _initializeApp() async {
   // TODO: Look for more consistent method that prevent race condition when phone is sleeping
   setupLocator();
   await AuthService().initState();
@@ -18,7 +23,6 @@ void main() async {
   } catch (error) {
     debugPrint('[push] setup failed; app will continue without push: $error');
   }
-  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -53,24 +57,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
       navigatorKey: locator<NavigationService>().navigatorKey,
       theme: Theme.of(context).copyWith(
-        primaryColor: R.primaryCol,
-        appBarTheme: AppBarTheme(
-          backgroundColor: R.primaryCol,
-          foregroundColor: Colors.white,
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: R.primaryCol,
-          foregroundColor: Colors.white,
-        ),
-        radioTheme: RadioThemeData(
-          fillColor: WidgetStateColor.resolveWith((states) => R.textColSecondary),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: R.textColSecondary
-          )
-        )
-      ),
+          primaryColor: R.primaryCol,
+          appBarTheme: AppBarTheme(
+            backgroundColor: R.primaryCol,
+            foregroundColor: Colors.white,
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: R.primaryCol,
+            foregroundColor: Colors.white,
+          ),
+          radioTheme: RadioThemeData(
+            fillColor:
+                WidgetStateColor.resolveWith((states) => R.textColSecondary),
+          ),
+          textButtonTheme: TextButtonThemeData(
+              style:
+                  TextButton.styleFrom(foregroundColor: R.textColSecondary))),
       title: 'Placement V2',
       initialRoute: '/',
       onGenerateRoute: RouteGeneratorPlacement.getRoutes,
