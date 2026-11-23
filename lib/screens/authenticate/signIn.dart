@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../resources/endpoints.dart';
 import '../../resources/strings.dart';
 import '../../services/auth/auth_service.dart';
-import '../../shared/debugLog.dart';
 import '../../shared/loadingPage.dart';
 
 class SignIn extends StatefulWidget {
@@ -187,7 +186,6 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 };
                 var res = await _auth.signInWithEmailPassword(dataMap);
                 if (!mounted) return;
-                debugLog("Signed IN!! with $res");
                 if (res == 0) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/wrapper', (Route<dynamic> route) => false);
