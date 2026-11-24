@@ -42,7 +42,7 @@ The version policy and APK download link must be kept current when a release is 
 
 ## Install
 
-1. Download the signed Android APK from the [GitHub Releases](https://github.com/HUKA-Taro/placementv2/releases) page.
+1. Download the signed Android APK from the [GitHub Releases](https://github.com/HUKA-Taro/placement_v2/releases) page.
 2. Open the APK on your Android phone and approve installation if prompted.
 3. Sign in with your Channel i account and allow notifications if you want alerts.
 
