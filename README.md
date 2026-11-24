@@ -1,44 +1,63 @@
 # Placement V2
 
-Based on [Placement Flutter](https://github.com/IMGIITRoorkee/placement-flutter). The original app and design are credited to the Information Management Group (IMG) team at IIT Roorkee.
+Placement V2 is an unofficial, substantially modified Android app based on [IMG's original Placement Flutter app](https://github.com/IMGIITRoorkee/placement-flutter). The original app and its design are credited to the Information Management Group (IMG), IIT Roorkee.
 
-Browse placement listings, apply through Channel i, and get Android alerts when placement results change.
+This fork keeps the Channel i placement workflow and adds focused result search, student profile links, custom result alerts, backend status, and supported-version checks.
 
-## Install on Android
+## What the app includes
 
-1. Open the signed release APK on your phone and follow Android's installation prompts.
-2. Sign in with your Channel i account and allow notifications if you want alerts.
+### Placement and application features
 
-Your installed version is shown at the bottom of **Profile**. On launch, the app checks the required build published by the Channel i checker. If an update is required, the app opens the official APK download when you tap **Install latest version**. Android asks you to confirm the installation.
+- Browse placement and internship profiles, review role details and eligibility, and apply through Channel i.
+- Review your application status and deadlines in the app.
+- Browse placement results by company or by branch, and choose the relevant year, placement or internship results, and sort order.
 
-## Features
+### Result search and student profiles
 
-- Browse placement listings, track application deadlines, and apply from your phone.
-- Browse company-wise and branch-wise results. Search by branch within a company’s results or by company within a branch’s results.
-- Enable profile links at the top of a result screen, then tap a student’s name to open their Channel i profile in your browser.
-- Receive alerts when company-wise placement results change, including while the app is open.
+- Search by company in the company-wise results list, or by branch in the branch-wise results list.
+- Within a company result, search student names or branches. Within a branch result, search student names or companies.
+- On an individual result page, use the link button in the top bar to enable student profile links. Eligible student names become links; tap a name to open that student's Channel i profile in the browser. Turn the link button off to disable these taps.
 
-## Notification settings
+Profile links depend on the result entry containing a usable enrollment number. Channel i may ask you to sign in in the browser before showing a profile.
 
-Open **Profile → Notification settings** to manage alerts.
+### Notifications
 
-Automatic alerts depend on the [Channel i checker](https://github.com/HUKA-Taro/channeli-checker) reaching the feeds and sending pushes through Firebase Cloud Messaging. Contact [HUKA_Taro](https://github.com/HUKA-Taro) if you want to host the checker. The public checker sends result alerts. Deadline alerts require a checker that supports them.
+Open **Notification settings** from **Profile** to manage alerts. The app provides separate switches for **Result updates** and **Deadline changes**; both are enabled by default. Android notification permission is required.
 
-The status row on this page checks the checker's public heartbeat every 30 seconds and reports whether it is online and whether the placement results feed is ready.
+- **Result updates:** The checker can send a push when it detects a new or changed company-wise placement result. The alert can also display while Placement V2 is open.
+- **Deadline changes:** The app has a separate preference and can display a matching push. The current checker release does not detect or send deadline-change alerts, so this alert type will not arrive until the checker adds that support.
+- **Backend status:** The settings page checks the checker's public heartbeat every 30 seconds and reports whether the checker is online and whether the placement results feed is ready. You can refresh the status manually.
+- **Send test notification:** This creates a local Android notification to check that this device can display alerts. It does not test the checker or prove that a remote push was delivered.
 
-**Send test notification** shows a local notification. If Android blocks notifications, the app will ask for permission or direct you to Android settings.
+Automatic result alerts depend on the separate [Channel i checker](https://github.com/HUKA-Taro/channeli-checker) reaching the Channel i feeds and sending through Firebase Cloud Messaging (FCM). If the checker is stopped, cannot reach a feed, or cannot send through Firebase, automatic alerts may be delayed or unavailable. Placement V2 can still be used to browse placement information and results when the checker is offline.
 
-Android can display alerts after you swipe the app away from Recents. If you force-stop the app in Android settings, reopen it to resume delivery.
+Android may deliver notifications after the app is swiped away from Recents. If Android's app settings are used to force-stop Placement V2, reopen the app to resume notification delivery.
+
+### App updates
+
+- On Android startup, the app checks a minimum supported build policy stored in Firestore. If this installation is below the required build, the app asks you to install the required release before continuing. A previously cached policy can be used if Firestore cannot be reached.
+- **Profile** shows the installed app version and lets you check the policy again. When an update is required, the app opens the release APK download; Android asks you to confirm the installation. The app cannot silently install an APK.
+
+The version policy and APK download link must be kept current when a release is published. The update flow depends on the Firestore policy being available and the release APK being downloadable.
+
+## Install
+
+1. Download the signed Android APK from the [GitHub Releases](https://github.com/HUKA-Taro/placementv2/releases) page.
+2. Open the APK on your Android phone and approve installation if prompted.
+3. Sign in with your Channel i account and allow notifications if you want alerts.
 
 ## Build locally
 
-Install Flutter and the Android SDK. Register `com.huka.taro.placementv2` as an Android app in your Firebase project and put its `google-services.json` in `android/app/`. Your checker must send to the same Firebase project to deliver pushes to your build.
+Install Flutter and the Android SDK, configure the Android app with the correct Firebase project, and configure the local release signing key. Then run:
 
 ```sh
 flutter pub get
 flutter build apk --release
 ```
 
-The Android project builds the release variant only. Find the signed APK at `build/app/outputs/flutter-apk/app-release.apk`. Configure `android/key.properties` locally with the existing release signing key for this app. Keep the properties file and signing key out of Git. Keep the app repository and release asset public while using the built-in update flow.
+The signed APK is written to `build/app/outputs/flutter-apk/app-release.apk`. Set the app version in `pubspec.yaml` before building. When publishing a release, keep the release tag, APK filename, and app version consistent. Do not commit the local signing key or `android/key.properties`.
 
-Publish the APK as `placementv2-2.3.0.apk` under tag `v2.3.0`. Keep the tag and app version in sync. Publish only once the signed APK is ready. The checker reads both app release repos and makes that build required.
+## Credits
+
+- Original app and design: [Information Management Group (IMG), IIT Roorkee](https://github.com/IMGIITRoorkee/placement-flutter).
+- Placement V2 modifications: HUKA_Taro.
