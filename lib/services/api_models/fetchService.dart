@@ -35,7 +35,7 @@ class FetchService {
       if (res.statusCode == 401 &&
           endPoint != EndPoints.HOST + EndPoints.LOGIN) {
         if (!isRetryAfterRefresh && await _auth.refreshToken()) {
-          return fetchDataService(endPoint, isRetryAfterRefresh: true);
+          return await fetchDataService(endPoint, isRetryAfterRefresh: true);
         }
         await _auth.logOut();
         locator<NavigationService>().navigateToWithRemove('/wrapper', {});

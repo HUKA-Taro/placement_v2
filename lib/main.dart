@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'shared/app_version_gate.dart';
 import 'package:flutter/material.dart';
 import 'services/notifications/custom_push_service.dart';
@@ -10,8 +12,7 @@ import 'services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(AppVersionGate(
-      start: _initializeApp, app: () => MyApp()));
+  runApp(AppVersionGate(start: _initializeApp, app: () => MyApp()));
 }
 
 Future<void> _initializeApp() async {
@@ -37,6 +38,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    unawaited(AuthService().reportDeviceActivityOpened());
   }
 
   @override
@@ -49,6 +51,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       AuthService().refreshToken();
+      unawaited(AuthService().reportDeviceActivityOpened());
     }
   }
 

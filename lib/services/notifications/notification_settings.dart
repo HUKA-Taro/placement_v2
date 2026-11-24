@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 import '../../resources/R.dart';
+import 'backend_status_tile.dart';
 import 'custom_push_service.dart';
 
 class NotificationSettings extends StatefulWidget {
@@ -157,6 +158,7 @@ class _NotificationSettingsState extends State<NotificationSettings>
                     ? null
                     : (value) => _update(entry.key, value),
               ),
+            const BackendStatusTile(),
             ListTile(
               leading: const Icon(Icons.notifications_active_outlined),
               title: const Text('Send test notification'),

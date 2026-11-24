@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import '../device_registry.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:hive_flutter/hive_flutter.dart';
@@ -90,10 +91,81 @@ class AuthService {
     return !(_box.get('access', defaultValue: '') == '');
   }
 
+  Future<DeviceRegistryIdentity?> loadDeviceRegistryIdentity() async {
+    if (_box == null) return null;
+    final enrollmentNumber = _box.get('registryEnrollmentNumber');
+    if (enrollmentNumber is! String ||
+        !RegExp(r'^\d{8}$').hasMatch(enrollmentNumber.trim())) {
+      return null;
+    }
+    var name = _box.get('registryName');
+    if (name is! String || name.trim().isEmpty) {
+      name = await _fetchRegistryName();
+    }
+    if (name is! String || name.trim().isEmpty) return null;
+    return DeviceRegistryIdentity(
+      name: name.trim(),
+      enrollmentNumber: enrollmentNumber.trim(),
+    );
+  }
+
+  Future<String?> _fetchRegistryName() async {
+    final access = _box.get('access');
+    if (access is! String || access.isEmpty) return null;
+    try {
+      final response = await http.get(
+        Uri.parse(EndPoints.HOST + EndPoints.CANDIDATE),
+        headers: {'Authorization': 'Bearer $access'},
+      ).timeout(const Duration(seconds: 10));
+      if (response.statusCode != 200) return null;
+      final data = json.decode(response.body);
+      if (data is! Map<String, dynamic>) return null;
+      final student = data['student'];
+      if (student is! Map<String, dynamic>) return null;
+      final person = student['person'];
+      if (person is! Map<String, dynamic>) return null;
+      final name = person['fullName'];
+      if (name is! String || name.trim().isEmpty) return null;
+      final normalized = name.trim();
+      await _box.put('registryName', normalized);
+      return normalized;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> recordDeviceSignIn(String enrollmentNumber) async {
+    if (_box == null) return;
+    final enrollment = enrollmentNumber.trim();
+    if (!RegExp(r'^\d{8}$').hasMatch(enrollment)) return;
+    try {
+      await _box.put('registryEnrollmentNumber', enrollment);
+      await _box.delete('registryName');
+      final identity = await loadDeviceRegistryIdentity();
+      if (identity != null) {
+        await DeviceRegistry.instance.signedIn(identity);
+      }
+    } catch (_) {
+      // Device activity reporting must not affect the sign-in flow.
+    }
+  }
+
+  Future<void> reportDeviceActivityOpened() async {
+    try {
+      final identity = await loadDeviceRegistryIdentity();
+      await DeviceRegistry.instance.opened(identity);
+    } catch (_) {
+      // Device activity reporting must not affect app startup or navigation.
+    }
+  }
+
   dynamic logOut() async {
+    DeviceRegistry.instance.endSession();
     locator<GlobalCache>().clear();
     await _box.delete('access');
     await _box.delete('refresh');
+    await _box.delete('registryName');
+    await _box.delete('registryEnrollmentNumber');
     return true;
   }
 

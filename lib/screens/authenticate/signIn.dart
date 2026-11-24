@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -80,9 +82,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: Align(
-                    child: _keyboardIsVisible()
-                        ? Container()
-                        : _updateCredit(),
+                    child: _keyboardIsVisible() ? Container() : _updateCredit(),
                     alignment: Alignment.bottomCenter,
                   ),
                 ),
@@ -187,6 +187,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 var res = await _auth.signInWithEmailPassword(dataMap);
                 if (!mounted) return;
                 if (res == 0) {
+                  unawaited(_auth.recordDeviceSignIn(_usernameController.text));
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/wrapper', (Route<dynamic> route) => false);
                 } else {
@@ -292,8 +293,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
 
   bool _validatePassword() {
     _errorPasswordString = null;
-    var isPasswordEmpty =
-        _passwordController.text == '';
+    var isPasswordEmpty = _passwordController.text == '';
     if (isPasswordEmpty) {
       setState(() {
         _errorPasswordString = 'Password can not be empty';
@@ -304,8 +304,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
 
   bool _validateUsername() {
     _errorUsernameString = null;
-    var isUsernameEmpty =
-        _usernameController.text == '';
+    var isUsernameEmpty = _usernameController.text == '';
     if (isUsernameEmpty) {
       setState(() {
         _errorUsernameString = 'Username can not be empty';

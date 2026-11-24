@@ -24,6 +24,8 @@ Open **Profile → Notification settings** to manage alerts.
 
 Automatic alerts depend on the [Channel i checker](https://github.com/HUKA-Taro/channeli-checker) reaching the feeds and sending pushes through Firebase Cloud Messaging. Contact [HUKA_Taro](https://github.com/HUKA-Taro) if you want to host the checker. The public checker sends result alerts. Deadline alerts require a checker that supports them.
 
+The status row on this page checks the checker's public heartbeat every 30 seconds and reports whether it is online and whether the placement results feed is ready.
+
 **Send test notification** shows a local notification. If Android blocks notifications, the app will ask for permission or direct you to Android settings.
 
 Android can display alerts after you swipe the app away from Recents. If you force-stop the app in Android settings, reopen it to resume delivery.
@@ -37,6 +39,6 @@ flutter pub get
 flutter build apk --release
 ```
 
-The Android project builds the release variant only. Find the signed APK at `build/app/outputs/flutter-apk/app-release.apk`. Configure `android/key.properties` locally with the existing release signing key for this app. Keep the properties file and signing key out of Git.
+The Android project builds the release variant only. Find the signed APK at `build/app/outputs/flutter-apk/app-release.apk`. Configure `android/key.properties` locally with the existing release signing key for this app. Keep the properties file and signing key out of Git. Keep the app repository and release asset public while using the built-in update flow.
 
-Publish the APK as `placementv2-2.3.0-14.apk` under tag `v2.3.0`. For each future release, use the version and Android build number from `pubspec.yaml`. Publish only once the signed APK is ready. The checker reads both app release repos and makes that build required.
+Publish the APK as `placementv2-2.3.0.apk` under tag `v2.3.0`. Keep the tag and app version in sync. Publish only once the signed APK is ready. The checker reads both app release repos and makes that build required.

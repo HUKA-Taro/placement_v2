@@ -16,6 +16,17 @@ class MainActivity : FlutterActivity() {
         val policyCache = getSharedPreferences("app_version_policy", MODE_PRIVATE)
         MethodChannel(messenger, "channeli/app_info").setMethodCallHandler { call, result ->
             when (call.method) {
+                "androidIdHash" -> {
+                    val androidId = Settings.Secure.getString(
+                        contentResolver, Settings.Secure.ANDROID_ID
+                    )
+                    val hash = androidId?.let { value ->
+                        java.security.MessageDigest.getInstance("SHA-256")
+                            .digest(value.toByteArray(Charsets.UTF_8))
+                            .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+                    }
+                    result.success(hash)
+                }
                 "version" -> result.success(packageManager.getPackageInfo(packageName, 0).versionName)
                 "buildNumber" -> {
                     val info = packageManager.getPackageInfo(packageName, 0)
