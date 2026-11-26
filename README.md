@@ -23,7 +23,6 @@ Profile links depend on the result entry containing a usable enrollment number. 
 ### Appearance
 
 - Choose **System**, **Light**, or **Dark** in **Profile > Theme**. System follows your device theme, and Placement remembers your choice.
-- The branded startup screen follows your theme and stays visible during the app version check.
 
 ### Notifications
 
