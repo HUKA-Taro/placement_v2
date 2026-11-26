@@ -1,97 +1,68 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import '../../resources/strings.dart';
-import '../../services/auth/auth_service.dart';
 import '../../shared/loadingPage.dart';
 
 class SplashPage extends StatefulWidget {
-  SplashPage({super.key});
+  const SplashPage({super.key});
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-  // late AuthService _auth;
-
   @override
   void initState() {
     super.initState();
-    // _auth = AuthService();
-    AuthService();
-    Timer(Duration(seconds: 2), () {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/wrapper', (Route<dynamic> route) => false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/wrapper', (_) => false);
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    // final double width = MediaQuery.of(context).size.width;
-    // final double height = MediaQuery.of(context).size.height;
+  Widget build(BuildContext context) => const PlacementStartupScreen();
+}
 
-    return Material(
+class PlacementStartupScreen extends StatelessWidget {
+  const PlacementStartupScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Scaffold(
+      body: SafeArea(
         child: Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-        ),
-        Column(
-          children: <Widget>[
-            Expanded(
-              flex: 6,
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 115,
-                      width: 100,
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Image.asset("assets/applogoaspect.png"),
-                    ),
-                    Text(
-                      Strings.PLACEMENT,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 24.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    LoadingPage(),
-                  ],
-                )),
-            Expanded(
-              flex: 1,
+          children: [
+            Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text("Updated by", style: TextStyle(color: Colors.blueAccent, fontSize: 12)),
-                      SizedBox(height: 2),
-                      Text("HUKA_Taro", style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/applogoaspect.png', width: 100, height: 100),
+                  const SizedBox(height: 8),
+                  Text('Placement V2',
+                      style: TextStyle(color: colors.primary, fontSize: 24,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
-            )
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 12,
+              child: Column(
+                children: [
+                  LoadingPage(),
+                  const SizedBox(height: 24),
+                  Text('Updated by', style: TextStyle(color: colors.onSurfaceVariant)),
+                  Text('HUKA_Taro', style: TextStyle(
+                      color: colors.primary, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
           ],
         ),
-      ],
-    ));
+      ),
+    );
   }
 }

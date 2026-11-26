@@ -19,7 +19,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         itemBuilder: (context, index) {
           return Card(
             elevation: 1,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             margin: EdgeInsets.only(bottom: 1),
             child: ListTile(
               title: Text(

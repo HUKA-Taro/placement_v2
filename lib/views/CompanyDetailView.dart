@@ -212,7 +212,7 @@ class CompanyDetailView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-          color: (color) ? Colors.white : Color(0xFFf5f5f5),
+          color: color ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.surfaceContainer,
           border: Border(
             bottom: BorderSide(width: 1.0, color: Color(0xFFe6e6e6)),
           )),
@@ -244,7 +244,7 @@ class CompanyDetailView extends StatelessWidget {
         ? Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-                color: (color) ? Colors.white : Color(0xFFf5f5f5),
+                color: color ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.surfaceContainer,
                 border: Border(
                   bottom: BorderSide(width: 1.0, color: Color(0xFFe6e6e6)),
                 )),

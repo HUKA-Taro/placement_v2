@@ -142,7 +142,7 @@ class _ResultDetailsBranchWiseState extends State<ResultDetailsBranchWise> {
                   results[index].studentName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: canOpen ? const Color(0xFF1565C0) : null,
+                    color: canOpen ? Theme.of(context).colorScheme.primary : null,
                     decoration: canOpen ? TextDecoration.underline : null,
                   ),
                 ),

@@ -132,11 +132,11 @@ class _BottomModalApplySheetState extends State<BottomModalApplySheet> {
 
   Widget _headerWidget(int index) {
     if (index == 0) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Text(
           "Choose the resume you wish to apply with: ",
-          style: TextStyle(color: Colors.black54),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
       );
     }

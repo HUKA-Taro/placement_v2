@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../screens/splash/splash.dart';
+import 'app_theme.dart';
+
 const _appInfo = MethodChannel('channeli/app_info');
 
 class AppVersionPolicy {
@@ -73,7 +76,9 @@ class AppVersionPolicy {
 }
 
 class AppVersionGate extends StatefulWidget {
-  const AppVersionGate({super.key, required this.start, required this.app});
+  const AppVersionGate({super.key, required this.start, required this.app, required this.themeMode});
+
+  final ThemeMode themeMode;
 
   final Future<void> Function() start;
   final Widget Function() app;
@@ -135,13 +140,13 @@ class _AppVersionGateState extends State<AppVersionGate> {
     final required = _required;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: widget.themeMode,
+      home: _checking ? const PlacementStartupScreen() : Scaffold(
         body: SafeArea(
           child: Center(
-            child: _checking
-                ? const CircularProgressIndicator(
-                    semanticsLabel: 'Checking app version')
-                : AlertDialog(
+            child: AlertDialog(
                     title: Text(required == null
                         ? 'App unavailable'
                         : 'This version is no longer supported'),

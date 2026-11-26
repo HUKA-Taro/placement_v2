@@ -2,7 +2,7 @@ import '../shared/profile_app_update.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../resources/R.dart';
+import '../shared/app_theme.dart';
 import '../resources/strings.dart';
 import '../shared/loadingPage.dart';
 import '../viewmodels/CandidateDetailsViewModel.dart';
@@ -110,7 +110,7 @@ class CandidateDetailsView extends StatelessWidget {
               leading: const Icon(Icons.notifications_outlined),
               title: Text(
                 'Notification settings',
-                style: TextStyle(color: R.textColPrimary),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => const NotificationSettings(),
@@ -119,14 +119,25 @@ class CandidateDetailsView extends StatelessWidget {
           ],
           _divider(),
           ListTile(
+            contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+            leading: const Icon(Icons.brightness_6_outlined),
+            title: const Text('Theme'),
+            subtitle: ValueListenableBuilder<ThemeMode>(
+              valueListenable: AppTheme.mode,
+              builder: (_, mode, __) => Text(_themeLabel(mode)),
+            ),
+            onTap: () => _chooseTheme(context),
+          ),
+          _divider(),
+          ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 5, 5, 5),
-            leading: Icon(Icons.help_outline),
+            leading: Icon(Icons.feedback_outlined),
             title: Text(
-              "FAQs",
-              style: TextStyle(color: R.textColPrimary),
+              "Feedback",
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             onTap: () async {
-              await model.launchURL(Strings.FAQ_LINK);
+              await model.launchURL(Strings.FEEDBACK_LINK);
             },
           ),
           _divider(),
@@ -135,7 +146,7 @@ class CandidateDetailsView extends StatelessWidget {
             leading: Icon(Icons.info),
             title: Text(
               "About Us",
-              style: TextStyle(color: R.textColPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             onTap: () {
               model.launchURL(Strings.ABOUT_US_LINK);
@@ -147,7 +158,7 @@ class CandidateDetailsView extends StatelessWidget {
             leading: Icon(Icons.exit_to_app),
             title: Text(
               "Log Out",
-              style: TextStyle(color: R.textColPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             onTap: () async {
               showDialog(
@@ -182,6 +193,42 @@ class CandidateDetailsView extends StatelessWidget {
     );
   }
 
+  String _themeLabel(ThemeMode mode) => switch (mode) {
+        ThemeMode.system => 'System',
+        ThemeMode.light => 'Light',
+        ThemeMode.dark => 'Dark',
+      };
+
+  Future<void> _chooseTheme(BuildContext context) async {
+    final current = AppTheme.mode.value;
+    final selection = await showDialog<ThemeMode>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Theme'),
+        children: [
+          for (final mode in ThemeMode.values)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(mode),
+              child: Row(children: [
+                Expanded(child: Text(_themeLabel(mode))),
+                if (mode == current) const Icon(Icons.check),
+              ]),
+            ),
+        ],
+      ),
+    );
+    if (selection == null || !context.mounted) return;
+    try {
+      await AppTheme.save(selection);
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not save theme.')),
+        );
+      }
+    }
+  }
+
   Widget _divider() {
     return const Divider(
       color: Color(0xFFe6e6e6),
@@ -198,7 +245,7 @@ class CandidateDetailsView extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, '/profileApplied');
       },
-      child: _button("My Applications", _width),
+      child: _button(context, "My Applications", _width),
     );
   }
 
@@ -207,11 +254,11 @@ class CandidateDetailsView extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, '/resumes');
       },
-      child: _button("My Resumes", _width),
+      child: _button(context, "My Resumes", _width),
     );
   }
 
-  Widget _button(String heading, double _width) {
+  Widget _button(BuildContext context, String heading, double _width) {
     return Container(
       width: _width * 0.9,
       decoration: BoxDecoration(
@@ -226,7 +273,7 @@ class CandidateDetailsView extends StatelessWidget {
               padding: EdgeInsets.only(left: 20),
               child: Text(
                 heading,
-                style: TextStyle(color: Color(0xFF878787), fontSize: 17),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 17),
               ),
             ),
           ),
@@ -251,40 +298,40 @@ class CandidateDetailsView extends StatelessWidget {
         children: <Widget>[
           Text(
             model.degreeName,
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
             model.departmentName,
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
           const SizedBox(
             height: 10,
           ),
-          _statusRows("Status: ", model.season + ", " + model.internshipStatus),
+          _statusRows(context, "Status: ", model.season + ", " + model.internshipStatus),
           const SizedBox(
             height: 5,
           ),
-          _statusRows("Pool A Credits: ", model.creditsPoolA.toString()),
+          _statusRows(context, "Pool A Credits: ", model.creditsPoolA.toString()),
           const SizedBox(
             height: 5,
           ),
-          _statusRows("Pool B Credits: ", model.creditsPoolB.toString()),
+          _statusRows(context, "Pool B Credits: ", model.creditsPoolB.toString()),
         ],
       ),
     );
   }
 
-  Widget _statusRows(String heading, String value) {
+  Widget _statusRows(BuildContext context, String heading, String value) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
           heading,
-          style: TextStyle(fontSize: 17, color: R.textColPrimary),
+          style: TextStyle(fontSize: 17, color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         Text(
           value,

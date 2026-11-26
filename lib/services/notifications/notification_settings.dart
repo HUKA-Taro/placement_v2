@@ -150,7 +150,7 @@ class _NotificationSettingsState extends State<NotificationSettings>
             for (final entry in CustomPushService.topics.entries)
               SwitchListTile(
                 title: Text(entry.value,
-                    style: TextStyle(color: R.textColPrimary)),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
                 activeThumbColor: R.primaryCol,
                 contentPadding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
                 value: _allowed && (_values[entry.key] ?? false),

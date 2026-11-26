@@ -68,7 +68,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
 
   Widget containsLogin(BuildContext context, double _width, double _height) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: _loading
           ? LoadingPage()
           : Stack(

@@ -5,14 +5,26 @@ import 'package:flutter/material.dart';
 import 'services/notifications/custom_push_service.dart';
 
 import 'locator.dart';
-import 'resources/R.dart';
+import 'shared/app_theme.dart';
 import 'services/routing/navigationService.dart';
 import 'services/routing/placement_routes.dart';
 import 'services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(AppVersionGate(start: _initializeApp, app: () => MyApp()));
+  try {
+    await AppTheme.load();
+  } catch (error) {
+    debugPrint('Could not load appearance settings: $error');
+  }
+  runApp(ValueListenableBuilder<ThemeMode>(
+    valueListenable: AppTheme.mode,
+    builder: (_, mode, __) => AppVersionGate(
+      start: _initializeApp,
+      themeMode: mode,
+      app: () => MyApp(themeMode: mode),
+    ),
+  ));
 }
 
 Future<void> _initializeApp() async {
@@ -27,7 +39,9 @@ Future<void> _initializeApp() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.themeMode});
+
+  final ThemeMode themeMode;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -59,23 +73,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: locator<NavigationService>().navigatorKey,
-      theme: Theme.of(context).copyWith(
-          primaryColor: R.primaryCol,
-          appBarTheme: AppBarTheme(
-            backgroundColor: R.primaryCol,
-            foregroundColor: Colors.white,
-          ),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: R.primaryCol,
-            foregroundColor: Colors.white,
-          ),
-          radioTheme: RadioThemeData(
-            fillColor:
-                WidgetStateColor.resolveWith((states) => R.textColSecondary),
-          ),
-          textButtonTheme: TextButtonThemeData(
-              style:
-                  TextButton.styleFrom(foregroundColor: R.textColSecondary))),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: widget.themeMode,
       title: 'Placement V2',
       initialRoute: '/',
       onGenerateRoute: RouteGeneratorPlacement.getRoutes,

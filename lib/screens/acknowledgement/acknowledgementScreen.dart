@@ -83,7 +83,7 @@ class _AcknowledgementScreenState extends State<AcknowledgementScreen> {
     return PdfViewer.uri(
       _pdfUri,
       params: PdfViewerParams(
-        backgroundColor: const Color(0xFFF2F2F2),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         loadingBannerBuilder: _loadingBanner,
         errorBannerBuilder: _errorBanner,
         onViewerReady: (document, controller) {

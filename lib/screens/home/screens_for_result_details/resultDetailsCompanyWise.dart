@@ -143,7 +143,7 @@ class _ResultDetailsCompanyWiseState extends State<ResultDetailsCompanyWise> {
                   results[index].studentName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: canOpen ? const Color(0xFF1565C0) : null,
+                    color: canOpen ? Theme.of(context).colorScheme.primary : null,
                     decoration: canOpen ? TextDecoration.underline : null,
                   ),
                 ),

@@ -20,6 +20,11 @@ This fork keeps the Channel i placement workflow and adds focused result search,
 
 Profile links depend on the result entry containing a usable enrollment number. Channel i may ask you to sign in in the browser before showing a profile.
 
+### Appearance
+
+- Choose **System**, **Light**, or **Dark** in **Profile > Theme**. System follows your device theme, and Placement remembers your choice.
+- The branded startup screen follows your theme and stays visible during the app version check.
+
 ### Notifications
 
 Open **Notification settings** from **Profile** to manage alerts. The app provides separate switches for **Result updates** and **Deadline changes**; both are enabled by default. Android notification permission is required.

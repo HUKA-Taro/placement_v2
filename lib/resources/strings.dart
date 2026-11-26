@@ -18,6 +18,6 @@ class Strings {
   static const String ACKNOWLEDGEMENT_ACCEPT = 'Accept and continue';
 
   static const String AUTH_BOX = 'placementAuthBox';
-  static const String FAQ_LINK = "https://channeli.in/placement_and_internship/tpo_forum/";
-  static const String ABOUT_US_LINK = "https://channeli.in/maintainer_site/";
+  static const String FEEDBACK_LINK = "https://github.com/HUKA-Taro/placement_v2/issues";
+  static const String ABOUT_US_LINK = "https://github.com/HUKA-Taro/placement_v2";
 }

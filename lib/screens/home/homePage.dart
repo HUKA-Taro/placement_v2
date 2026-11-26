@@ -65,9 +65,11 @@ class _HomePageState extends State<HomePage>
                 children: _tabSelector(),
               ),
               bottomNavigationBar: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black54
+                          : Colors.grey.shade300,
                       blurRadius: 10.0,
                       spreadRadius: 2.0,
                       offset: Offset(0, -5),
